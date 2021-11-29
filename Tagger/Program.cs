@@ -13,7 +13,7 @@ namespace Tagger
         {
             try
             {
-                Parser.Default.ParseArguments<Options>(args).WithParsedAsync(RunAsync);
+                Parser.Default.ParseArguments<Options>(args).WithParsedAsync(RunAsync).Wait();
             }
             catch (Exception ex)
             {
