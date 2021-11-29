@@ -16,14 +16,18 @@ jobs:
         with:
           dotnet-version: 5.0.x
 
-      - name: Build
+      - name: Set Version
         run: |
           curl --location --output tsv https://github.com/jasondavis303/TimestampVersion/releases/latest/download/tsv
           chmod +x tsv
           ./tsv --xml-files Tagger/Tagger.csproj --env-file $GITHUB_ENV --verbose
+          
+      - name: Build
+        run: |
           dotnet publish -r win-x64 -p:PublishSingleFile=true --no-self-contained -c release -o publish
           cd publish
           zip -m9 Tagger.zip Tagger.exe
+          echo ${{ env.TIMESTAMP_VERSION }} > Tagger.ver
           cd ..
           curl --location --output s3u  https://github.com/jasondavis303/s3u/releases/latest/download/s3u
           chmod +x s3u
