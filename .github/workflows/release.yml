@@ -22,3 +22,5 @@ jobs:
           chmod +x tsv
           ./tsv --xml-files Tagger/Tagger.csproj --env-file $GITHUB_ENV --verbose
           dotnet publish -r win-x64 -p:PublishSingleFile=true --no-self-contained -c release -o publish
+          cd publish
+          zip -m9 Tagger.zip Tagger.exe
