@@ -1,6 +1,6 @@
-name: build
+name: Release
 on:
-  push:
+  workflow_dispatch:
     branches: [ master ]
 
 jobs:
@@ -24,3 +24,6 @@ jobs:
           dotnet publish -r win-x64 -p:PublishSingleFile=true --no-self-contained -c release -o publish
           cd publish
           zip -m9 Tagger.zip Tagger.exe
+          curl --location --output s3u  https://github.com/jasondavis303/s3u/releases/latest/download/s3u
+          chmod +x s3u
+          .\s3u --endpoint s3.us-central-1.wasabisys.com --access-key ${{ secrets.S3_KEY }} --access-secret ${{ secrets.S3_SECRET }} --source upload --bucket dustypig --target bin/tools --overwrite --verbose
